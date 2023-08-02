@@ -1,0 +1,8 @@
+# python
+__pycache__/
+
+# mac
+.DS_Store
+
+# neuron
+x86_64/
