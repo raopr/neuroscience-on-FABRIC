@@ -8,6 +8,8 @@ sudo apt-get install libmeschach-dev
 sudo apt install python3-pip
 pip3 install neuron
 pip3 install matplotlib
+sudo pat install openmpi-bin
+pip3 install mpi4py
 ```
 
 ## Running the simulation
@@ -19,5 +21,5 @@ pip3 install matplotlib
 3. Adjust parameters in `simulation.py`.
 4. To run with `mpi`,
 ```bash
-mpiexec -n 2 python wta_simulation.py
+mpiexec -n 2 python simulation.py
 ```
