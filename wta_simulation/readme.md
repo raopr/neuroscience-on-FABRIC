@@ -13,7 +13,7 @@ pip3 install mpi4py
 ```
 
 ## Running the simulation
-1. Go to the folder which contains both `simulation.py` and `modfiles/`
+1. CLone and go to the folder which contains both `simulation.py` and `modfiles/`
 2. From this folder, compile the modfiles,
 ```bash
 /home/ubuntu/.local/bin/nrnivmodl modfiles
