@@ -43,7 +43,7 @@ if __name__ == "__main__":
                 ax[i].grid()
 
             ax[0].set_ylabel("V (mV)")
-            plt.show()
+            plt.savefig("out.png")
 
     pc.barrier()
     pc.done()
