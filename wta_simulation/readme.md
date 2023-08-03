@@ -21,5 +21,5 @@ pip3 install mpi4py
 3. Adjust parameters in `simulation.py`.
 4. To run with `mpi`,
 ```bash
-mpiexec -n 2 python simulation.py
+mpiexec -n 2 python3 simulation.py
 ```
