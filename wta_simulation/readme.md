@@ -23,3 +23,18 @@ pip3 install mpi4py
 ```bash
 mpiexec -n 2 python3 simulation.py
 ```
+
+## Running dstat
+
+1. Install 
+<br>`sudo apt-get update`
+<br>`sudo apt-get install dstat -y`
+
+2. Run
+<br>`dstat -t -l -d -m --noupdate 2 > report.txt &`
+<br> This command will write the output to report.txt in the background for every 2 seconds. Feel free to modify the time interval. Also, there are more options to collect stats like Netowork. Do `dstat -h` for full list of options 
+
+3. To Stop:
+<br> Get the process ID
+<br>`pgrep -f "dstat -t -l -d -m"`
+<br>`kill process-id`
