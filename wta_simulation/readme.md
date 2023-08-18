@@ -36,5 +36,5 @@ mpiexec -n 2 python3 simulation.py
 
 3. To Stop:
 <br> Get the process ID
-<br>`pgrep -f "dstat -t -l -d -m"`
+<br>`pgrep -f "dstat -t -l -c -m -d"`
 <br>`kill process-id`
