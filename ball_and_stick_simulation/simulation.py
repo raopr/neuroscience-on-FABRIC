@@ -28,7 +28,7 @@ if pc.id() == 0:
     plt.figure()
     for i, spike_times in data.items():
         plt.vlines(spike_times, i + 0.5, i + 1.5)
-    plt.show()
+    plt.savefig("out.png")
 
 pc.barrier()
 pc.done()
