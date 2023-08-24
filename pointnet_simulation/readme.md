@@ -10,7 +10,7 @@ sudo apt install openmpi-bin -y
 pip3 install mpi4py==3.0.3
 pip3 install bmtk
 pip3 install --upgrade scipy
-pip3 uninstall numpy
+pip3 uninstall numpy -y
 pip3 install numpy==1.23.1
 sudo apt-get install nest -y
 source /usr/bin/nest/nest_vars.sh -y
