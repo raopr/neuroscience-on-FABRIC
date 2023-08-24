@@ -46,3 +46,12 @@ mpirun -np 20 python3 run_pointnet.py
 <br> Get the process ID
 <br>`pgrep -f "dstat -t -l -c -m -d"`
 <br>`kill process-id`
+
+
+## Start Screen Session 
+
+1. `screen -S sim` to start a screen named `sim` <br>
+2. To exit screen `Ctrl + A + D` <br>
+3. To reconnect and see list of available screens `screen -ls` and then to connect `screen -r [screen name]`<br>
+4. To kill screen, connect and then `Ctrl + A + K` + `Y` <br>
+
