@@ -8,7 +8,7 @@ sudo apt-get install libmeschach-dev -y
 sudo apt install python3-pip -y
 pip3 install neuron
 pip3 install matplotlib
-sudo apt install openmpi-bin
+sudo apt install openmpi-bin -y
 pip3 install mpi4py
 ```
 
