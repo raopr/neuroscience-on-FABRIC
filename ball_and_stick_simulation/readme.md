@@ -3,8 +3,8 @@
 
 ```bash
 sudo apt-get update 
-sudo apt-get install libreadline-dev
-sudo apt-get install libmeschach-dev
+sudo apt-get install libreadline-dev -y
+sudo apt-get install libmeschach-dev -y
 sudo apt install python3-pip
 pip3 install neuron
 pip3 install matplotlib
