@@ -14,7 +14,7 @@ pip3 uninstall numpy -y
 pip3 install numpy==1.23.1
 sudo add-apt-repository ppa:nest-simulator/nest
 sudo apt-get install nest -y
-source /usr/bin/nest/nest_vars.sh -y
+source /usr/bin/nest_vars.sh -y
 ```
 
 ## Running the simulation
