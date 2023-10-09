@@ -11,7 +11,7 @@ if __name__ == "__main__":
         t_stop = int(sys.argv[sys.argv.index("-t") + 1])
 
     # Create N vanilla HH neurons
-    neurons = nest.Create(model = "hh_psc_alpha", n = N)
+    neurons = nest.Create(model = "aeif_psc_alpha", n = N)
 
     # Make a ring network
     for i in range(N - 1):
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     voltmeter1 = nest.Create("voltmeter", params = {'record_to': 'memory'})
     nest.Connect(voltmeter1, neurons[0])
     spikes = nest.Create('spike_recorder', params = {'record_to': 'memory'})
-    nest.Connect(neurons,  spikes)
+    nest.Connect(neurons[0],  spikes)
 
     nest.Simulate(t_stop)
 
