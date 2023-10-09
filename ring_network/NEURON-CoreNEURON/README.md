@@ -5,7 +5,7 @@ Simulation:
 - Time: 5000 ms
 - Runs for about 3 mins in human time on CPU
 
-[[Setup]](https://github.com/raopr/neuroscience-on-FABRIC/issues/9#issuecomment-1752290749) the environment. Compile the mod files with
+[[Set up]](https://github.com/raopr/neuroscience-on-FABRIC/issues/9#issuecomment-1752290749) the environment. Compile the mod files with
 ```bash
 nrnivmodl -coreneuron .
 ```
