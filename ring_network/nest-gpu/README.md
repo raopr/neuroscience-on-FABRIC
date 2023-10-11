@@ -7,6 +7,7 @@ Simulation:
 
 [[Set up]](https://github.com/raopr/neuroscience-on-FABRIC/issues/6#issuecomment-1750145807) the environment and variables
 ```bash
+export CUDACXX=/usr/local/cuda-12.2/bin/nvcc
 source /home/ubuntu/nest-gpu-x-build/bin/nestgpu_vars.sh
 ```
 
