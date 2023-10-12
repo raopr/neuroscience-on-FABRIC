@@ -2,8 +2,8 @@
 
 Simulation:
 - Model: [aeif_psc_alpha](https://nest-gpu.readthedocs.io/en/latest/models/index.html)
-- Number of cells: 5000
-- Time: 5000 ms
+- Number of cells: 20000
+- Time: 30000 ms
 
 [[Set up]](https://github.com/raopr/neuroscience-on-FABRIC/issues/6#issuecomment-1750145807) the environment and variables
 ```bash
