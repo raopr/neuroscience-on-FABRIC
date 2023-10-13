@@ -23,7 +23,7 @@ pc.set_maxstep(10 * ms)
 t = h.Vector().record(h._ref_t)
 h.finitialize(-65 * mV)
 h.stdinit()
-pc.psolve(30000 * ms)
+pc.psolve(6000 * ms)
 
 # send all spike time data to node 0
 local_data = {cell._gid: list(cell.spike_times) for cell in ring.cells}
