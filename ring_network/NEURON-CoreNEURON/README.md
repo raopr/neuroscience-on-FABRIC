@@ -2,7 +2,7 @@
 
 Simulation:
 - Number of cells: 4000
-- Time: 30000 ms
+- Time: 6000 ms
 
 [[Set up]](https://github.com/raopr/neuroscience-on-FABRIC/issues/9#issuecomment-1752290749) the environment. Compile the mod files with
 ```bash
