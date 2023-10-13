@@ -9,10 +9,16 @@ if __name__ == "__main__":
     else:
         N = int(sys.argv[sys.argv.index("-N") + 1])
         t_stop = int(sys.argv[sys.argv.index("-t") + 1])
+    
+    # Enable multithreading
+    nest.local_num_threads = 20
+    
+    # Print sim time
+    nest.SetKernelStatus({"print_time": True})
 
     # Create N vanilla HH neurons
     neurons = nest.Create(model = "aeif_psc_alpha", n = N)
-
+    
     # Make a ring network
     for i in range(N - 1):
         nest.Connect(neurons[i], neurons[i+1], syn_spec = {'weight': 10, 'delay': 0.1})

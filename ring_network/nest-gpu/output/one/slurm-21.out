@@ -1,0 +1,28 @@
+Calibrating ...
+Simulating ...
+Neural activity simulation time: 30000.000 ms
+
+              -- NEST GPU --
+
+  Copyright (C) 2021 The NEST Initiative
+
+ This program is provided AS IS and comes with
+ NO WARRANTY. See the file LICENSE for details.
+
+ Homepage: https://github.com/nest/nest-gpu
+
+SUCCESS
+
+  SpikeBufferUpdate_time: 0.900984
+  poisson_generator_time: 0.0131542
+  neuron_Update_time: 3.56974
+  copy_ext_spike_time: 0
+  SendExternalSpike_time: 0
+  SendSpikeToRemote_time: 0
+  RecvSpikeFromRemote_time: 0
+  NestedLoop_time: 0.0315511
+  GetSpike_time: 1.75585
+  SpikeReset_time: 0.878259
+  ExternalSpikeReset_time: 0
+Building time: 0.479813
+Simulation time: 42.998
