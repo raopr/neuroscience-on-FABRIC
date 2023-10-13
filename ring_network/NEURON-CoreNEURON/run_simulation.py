@@ -15,7 +15,7 @@ coreneuron.enable = True
 coreneuron.gpu = True
 ###
 
-ring = Ring(N = 5000)
+ring = Ring(N = 4000)
 
 pc = h.ParallelContext()
 pc.set_maxstep(10 * ms)
@@ -23,7 +23,7 @@ pc.set_maxstep(10 * ms)
 t = h.Vector().record(h._ref_t)
 h.finitialize(-65 * mV)
 h.stdinit()
-pc.psolve(5000 * ms)
+pc.psolve(30000 * ms)
 
 # send all spike time data to node 0
 local_data = {cell._gid: list(cell.spike_times) for cell in ring.cells}
@@ -42,4 +42,9 @@ if pc.id() == 0:
 
 pc.barrier()
 pc.done()
+
+from datetime import datetime
+print(datetime.now())
+
 h.quit()
+

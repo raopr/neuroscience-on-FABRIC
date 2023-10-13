@@ -1,0 +1,103 @@
+No protocol specified
+numprocs=1
+NEURON -- VERSION 8.1.0+ HEAD (047dd8240+) 2022-03-25
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2021
+See http://neuron.yale.edu/neuron/credits
+
+Additional mechanisms from files
+
+0 x86_64/special: can't open -python3
+Unable to init server: Could not connect: Connection refused
+Unable to init server: Could not connect: Connection refused
+
+(special:52112): Gdk-CRITICAL **: 04:57:23.896: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+ num_mpi=1
+ num_omp_thread=1
+
+ Info : 2 GPUs shared by 1 ranks per node
+ 
+ Duke, Yale, and the BlueBrain Project -- Copyright 1984-2020
+ Version : 1.0 22e6e405 (2022-03-16 16:55:25 +0100)
+ 
+ Additional mechanisms from files
+ exp2syn.mod expsyn.mod hh.mod netstim.mod passive.mod pattern.mod stim.mod svclmp.mod
+
+ Memory (MBs) :             After mk_mech : Max 374.0352, Min 374.0352, Avg 374.0352 
+ GPU Memory (MBs) : Used = 113.687500, Free = 14816.875000, Total = 14930.562500
+ Memory (MBs) :            After MPI_Init : Max 374.0352, Min 374.0352, Avg 374.0352 
+ GPU Memory (MBs) : Used = 113.687500, Free = 14816.875000, Total = 14930.562500
+ Memory (MBs) :          Before nrn_setup : Max 374.0352, Min 374.0352, Avg 374.0352 
+ GPU Memory (MBs) : Used = 113.687500, Free = 14816.875000, Total = 14930.562500
+ Setup Done   : 0.01 seconds 
+ Model size   : 3.62 MB
+ Memory (MBs) :          After nrn_setup  : Max 377.0430, Min 377.0430, Avg 377.0430 
+ GPU Memory (MBs) : Used = 113.687500, Free = 14816.875000, Total = 14930.562500
+GENERAL PARAMETERS
+--mpi=true
+--mpi-lib=
+--gpu=true
+--dt=0.025
+--tstop=6000
+
+GPU
+--nwarp=65536
+--cell-permute=1
+--cuda-interface=false
+
+INPUT PARAMETERS
+--voltage=1000
+--seed=-1
+--datpath=.
+--filesdat=files.dat
+--pattern=
+--report-conf=
+--restore=     
+
+PARALLEL COMPUTATION PARAMETERS
+--threading=false
+--skip_mpi_finalize=true
+
+SPIKE EXCHANGE
+--ms_phases=2
+--ms_subintervals=2
+--multisend=false
+--spk_compress=0
+--binqueue=false
+
+CONFIGURATION
+--spikebuf=100000
+--prcellgid=-1
+--forwardskip=0
+--celsius=6.3
+--mindelay=10
+--report-buffer-size=4
+
+OUTPUT PARAMETERS
+--dt_io=0.1
+--outpath=.
+--checkpoint=
+
+ Start time (t) = 0
+
+ Memory (MBs) :  After mk_spikevec_buffer : Max 377.0430, Min 377.0430, Avg 377.0430 
+ GPU Memory (MBs) : Used = 113.687500, Free = 14816.875000, Total = 14930.562500
+ Memory (MBs) :     After nrn_finitialize : Max 7704.3438, Min 7704.3438, Avg 7704.3438 
+ GPU Memory (MBs) : Used = 8119.687500, Free = 6810.875000, Total = 14930.562500
+
+psolve |                                                         | t: 0.00   ETA: 0h00m00spsolve |                                                         | t: 10.00  ETA: 0h09m59spsolve |=                                                        | t: 149.63 ETA: 0h01m18spsolve |==                                                       | t: 259.37 ETA: 0h01m06spsolve |===                                                      | t: 409.00 ETA: 0h00m54spsolve |====                                                     | t: 508.75 ETA: 0h00m53spsolve |======                                                   | t: 648.38 ETA: 0h00m49spsolve |=======                                                  | t: 748.13 ETA: 0h00m49spsolve |========                                                 | t: 897.75 ETA: 0h00m45spsolve |=========                                                | t: 997.50 ETA: 0h00m45spsolve |==========                                               | t: 1097.25 ETA: 0h00m44spsolve |===========                                              | t: 1246.88 ETA: 0h00m41spsolve |============                                             | t: 1346.63 ETA: 0h00m41spsolve |==============                                           | t: 1496.25 ETA: 0h00m39spsolve |===============                                          | t: 1596.00 ETA: 0h00m38spsolve |================                                         | t: 1745.63 ETA: 0h00m36spsolve |=================                                        | t: 1845.38 ETA: 0h00m36spsolve |==================                                       | t: 1945.13 ETA: 0h00m35spsolve |===================                                      | t: 2094.75 ETA: 0h00m33spsolve |====================                                     | t: 2194.50 ETA: 0h00m32spsolve |======================                                   | t: 2344.13 ETA: 0h00m31spsolve |=======================                                  | t: 2453.87 ETA: 0h00m30spsolve |========================                                 | t: 2553.62 ETA: 0h00m29spsolve |=========================                                | t: 2703.25 ETA: 0h00m28spsolve |==========================                               | t: 2803.00 ETA: 0h00m27spsolve |============================                             | t: 2952.62 ETA: 0h00m25spsolve |============================                             | t: 3052.37 ETA: 0h00m25spsolve |==============================                           | t: 3202.00 ETA: 0h00m23spsolve |===============================                          | t: 3301.75 ETA: 0h00m22spsolve |================================                         | t: 3401.50 ETA: 0h00m22spsolve |=================================                        | t: 3551.12 ETA: 0h00m20spsolve |==================================                       | t: 3650.87 ETA: 0h00m19spsolve |====================================                     | t: 3800.50 ETA: 0h00m18spsolve |=====================================                    | t: 3900.25 ETA: 0h00m17spsolve |======================================                   | t: 4049.87 ETA: 0h00m16spsolve |=======================================                  | t: 4149.62 ETA: 0h00m15spsolve |========================================                 | t: 4249.37 ETA: 0h00m14spsolve |=========================================                | t: 4399.00 ETA: 0h00m13spsolve |==========================================               | t: 4498.75 ETA: 0h00m12spsolve |============================================             | t: 4648.37 ETA: 0h00m11spsolve |=============================================            | t: 4748.12 ETA: 0h00m10spsolve |==============================================           | t: 4897.75 ETA: 0h00m09spsolve |===============================================          | t: 4997.50 ETA: 0h00m08spsolve |================================================         | t: 5097.25 ETA: 0h00m07spsolve |=================================================        | t: 5246.87 ETA: 0h00m06spsolve |==================================================       | t: 5346.62 ETA: 0h00m05spsolve |====================================================     | t: 5496.25 ETA: 0h00m04spsolve |=====================================================    | t: 5596.00 ETA: 0h00m03spsolve |======================================================   | t: 5745.62 ETA: 0h00m02spsolve |=======================================================  | t: 5845.37 ETA: 0h00m01spsolve |======================================================== | t: 5945.12 ETA: 0h00m00spsolve |=========================================================| t: 6000.00 ETA: 0h00m50s
+
+Solver Time : 49.5605
+
+
+ Simulation Statistics
+ Number of cells: 4000
+ Number of compartments: 20000
+ Number of presyns: 4001
+ Number of input presyns: 0
+ Number of synapses: 8001
+ Number of point processes: 4001
+ Number of transfer sources: 0
+ Number of transfer targets: 0
+ Number of spikes: 925
+ Number of spikes with non negative gid-s: 925
+2023-10-13 04:59:18.438317
