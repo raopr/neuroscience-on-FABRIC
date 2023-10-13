@@ -1,9 +1,8 @@
 # Running CoreNEURON
 
 Simulation:
-- Number of cells: 5000
-- Time: 5000 ms
-- Runs for about 3 mins in human time on CPU
+- Number of cells: 4000
+- Time: 30000 ms
 
 [[Set up]](https://github.com/raopr/neuroscience-on-FABRIC/issues/9#issuecomment-1752290749) the environment. Compile the mod files with
 ```bash
