@@ -26,7 +26,7 @@ mode = cvode.cache_efficient(True)
 ### To set CoreNEURON, change the following lines
 from neuron import coreneuron
 coreneuron.enable = True
-coreneuron.gpu = False
+coreneuron.gpu = True
 ###
 
 if __name__ == "__main__":
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     
     pc = h.ParallelContext()
     ### Uncomment if running on CPU
-    pc.nthread(20)
+    # pc.nthread(20)
     ###
     pc.set_maxstep(10 * ms)
 
