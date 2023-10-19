@@ -26,42 +26,41 @@ if __name__ == "__main__":
 
     # Create N / 2 neurons on each node
     neurons = []
-    if rank == 0:
-        neurons.append(ngpu.RemoteCreate(0, "aeif_psc_alpha", N // 2))
-    elif rank == 0:
-        neurons.append(ngpu.RemoteCreate(1, "aeif_psc_alpha", N // 2))
+    for i in range(2):
+        neurons.append(ngpu.RemoteCreate(i, "aeif_psc_alpha", N // 2).node_seq)
 
     # Make a ring network
     conn_dict = {"rule": "one_to_one"}
 
     # Connect on the first node
     if rank == 0:
-        for i in range(N // 2):
-            ngpu.Connect(neurons[i:i+1], neurons[i+1:i+2], conn_dict, {'weight': 10, 'delay': 0.1, "receptor": 0})
+        for i in range(N // 2 - 1):
+            ngpu.Connect(neurons[0][i:i+1], neurons[0][i+1:i+2], conn_dict, {'weight': 10, 'delay': 0.1, "receptor": 0})
 
     # Connect to the second node
-    ngpu.RemoteConnect(0, neurons[N // 2: N // 2 + 1], 1, neurons[0:1], conn_dict, {'weight': 10, 'delay': 0.1, "receptor": 0})
+    ngpu.RemoteConnect(0, neurons[0][N // 2 - 1 : N // 2], 1, neurons[1][0:1], conn_dict, {'weight': 10, 'delay': 0.1, "receptor": 0})
 
     # Connect on the second node
     if rank == 1:
-        for i in range(N // 2):
-            ngpu.Connect(neurons[i:i+1], neurons[i+1:i+2], conn_dict, {'weight': 10, 'delay': 0.1, "receptor": 0})
+        for i in range(N // 2 - 1):
+            ngpu.Connect(neurons[1][i:i+1], neurons[1][i+1:i+2], conn_dict, {'weight': 10, 'delay': 0.1, "receptor": 0})
 
     spike_det = ngpu.Create("spike_detector")
-    ngpu.Connect([neurons[0]], spike_det, {"rule": "one_to_one"}, {"weight": 1.0, "delay": 1.0, "receptor":0})
+    ngpu.Connect([neurons[0][0]], spike_det, {"rule": "one_to_one"}, {"weight": 1.0, "delay": 1.0, "receptor":0})
 
     # Apply current injection
     exc = 0.1
     ini = 0.1
     Istim = 2000.0
     Istim1 = 20.0
-    ngpu.SetStatus(neurons[0:1],  {"tau_syn_ex": exc, "tau_syn_in": ini, "I_e": Istim1})
-    ngpu.SetStatus(neurons[1:N],  {"tau_syn_ex": exc, "tau_syn_in": ini, "I_e": Istim})
+    ngpu.SetStatus(neurons[0][0:1],  {"tau_syn_ex": exc, "tau_syn_in": ini, "I_e": Istim1})
+    ngpu.SetStatus(neurons[1][1:N//2],  {"tau_syn_ex": exc, "tau_syn_in": ini, "I_e": Istim})
 
     # Record voltage and spikes
-    voltage = ngpu.CreateRecord("", ["V_m"], [neurons[0]], [0])
+    voltage = ngpu.CreateRecord("", ["V_m"], [neurons[0][0]], [0])
     spikes = ngpu.CreateRecord("", ["spike_height"], [spike_det[0]], [0])
-
+    
+    ngpu.Calibrate()
     ngpu.Simulate(t_stop)
 
     print("SUCCESS")
