@@ -15,8 +15,14 @@ In `run_simulation.py` line 15, set `coreneuron.gpu = False`. Run with
 mpiexec -n 1 x86_64/special -mpi -python3 run_simulation.py 
 ```
 
-## On GPU
+## On 1 GPU
 In `run_simulation.py` line 15, set `coreneuron.gpu = True`. Run with
 ```bash
 mpiexec -n 1 x86_64/special -mpi -python3 run_simulation.py 
+```
+
+## On 2 GPUs
+In `run_simulation.py` line 15, set `coreneuron.gpu = True`. Run with
+```bash
+mpiexec -n 2 x86_64/special -mpi=pmix -python3 run_simulation.py
 ```
