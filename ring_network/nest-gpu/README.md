@@ -22,5 +22,5 @@ sbatch batch_script.sh
 ## 2 GPUs
 Run with
 ```bash
-mpirun -np 2 python3 hpc_benchmark.py
+mpirun -np 2 python3 2gpu_run_simulation.py -N 20000 -t 30000
 ```
