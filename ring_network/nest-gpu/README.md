@@ -13,8 +13,14 @@ sudo systemctl restart slurmctld
 source /home/ubuntu/nest-gpu-x-build/bin/nestgpu_vars.sh
 ```
 
+## 1 GPU
 Run with
 ```bash
 sbatch batch_script.sh
 ```
 
+## 2 GPUS
+Run with
+```bash
+mpirun -np 2 python3 hpc_benchmark.py
+```
