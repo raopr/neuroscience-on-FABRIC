@@ -19,7 +19,7 @@ Run with
 sbatch batch_script.sh
 ```
 
-## 2 GPUS
+## 2 GPUs
 Run with
 ```bash
 mpirun -np 2 python3 hpc_benchmark.py
