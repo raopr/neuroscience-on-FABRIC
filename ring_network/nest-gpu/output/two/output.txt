@@ -1,0 +1,65 @@
+              -- NEST GPU --
+
+  Copyright (C) 2021 The NEST Initiative
+
+ This program is provided AS IS and comes with
+ NO WARRANTY. See the file LICENSE for details.
+
+ Homepage: https://github.com/nest/nest-gpu
+
+
+              -- NEST GPU --
+
+  Copyright (C) 2021 The NEST Initiative
+
+ This program is provided AS IS and comes with
+ NO WARRANTY. See the file LICENSE for details.
+
+ Homepage: https://github.com/nest/nest-gpu
+
+MPI rank 0 : Calibrating ...
+MPI rank 1 : Calibrating ...
+MPI rank 0 : Simulating ...
+Neural activity simulation time: 30000.000 ms
+MPI rank 1 : Simulating ...
+Neural activity simulation time: 30000.000 ms
+
+MPI rank 0 :   SpikeBufferUpdate_time: 0.971353
+MPI rank 0 :   poisson_generator_time: 0.0136131
+MPI rank 0 :   neuron_Update_time: 3.84283
+MPI rank 0 :   copy_ext_spike_time: 2.88263
+MPI rank 0 :   SendExternalSpike_time: 0.0334957
+MPI rank 0 :   SendSpikeToRemote_time: 4.15263
+MPI rank 0 :   RecvSpikeFromRemote_time: 0.898478
+MPI rank 0 :   NestedLoop_time: 0.0327368
+MPI rank 0 :   GetSpike_time: 1.82231
+MPI rank 0 :   SpikeReset_time: 0.952345
+MPI rank 0 :   ExternalSpikeReset_time: 1.0114
+MPI rank 0 :   SendSpikeToRemote_MPI_time: 0.15046
+MPI rank 0 :   RecvSpikeFromRemote_MPI_time: 0.872984
+
+MPI rank 1 :   SpikeBufferUpdate_time: 1.0439
+MPI rank 1 :   poisson_generator_time: 0.0133207
+MPI rank 1 :   neuron_Update_time: 4.20207
+MPI rank 1 :   copy_ext_spike_time: 2.86662
+MPI rank 1 :   SendExternalSpike_time: 0.0354034
+MPI rank 1 :   SendSpikeToRemote_time: 4.12981
+MPI rank 1 :   RecvSpikeFromRemote_time: 0.913515
+MPI rank 1 :   NestedLoop_time: 0.0351717
+MPI rank 1 :   GetSpike_time: 1.97464
+MPI rank 1 :   SpikeReset_time: 1.02835
+MPI rank 1 :   ExternalSpikeReset_time: 1.02188
+MPI rank 1 :   SendSpikeToRemote_MPI_time: 0.123899
+MPI rank 1 :   RecvSpikeFromRemote_MPI_time: 0.888756
+MPI rank 1 :   SendSpikeToRemote_CUDAcp_time: 2.93108
+MPI rank 1 :   RecvSpikeFromRemote_CUDAcp_time: 0.00930187
+MPI rank 1 :   JoinSpike_time: 1.02481
+MPI rank 1 : Building time: 0.52536
+MPI rank 1 : Simulation time: 51.1941
+MPI rank 0 :   SendSpikeToRemote_CUDAcp_time: 2.97977
+MPI rank 0 :   RecvSpikeFromRemote_CUDAcp_time: 0
+MPI rank 0 :   JoinSpike_time: 0.971617
+MPI rank 0 : Building time: 0.525582
+SUCCESS
+MPI rank 0 : Simulation time: 51.1941
+SUCCESS
