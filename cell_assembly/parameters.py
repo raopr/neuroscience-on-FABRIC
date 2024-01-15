@@ -6,15 +6,15 @@ class Parameters:
 
     # Build
     N_assemblies: int = 4
-    N_cells_per_assembly: int = 5
+    N_cells_per_assembly: int = 40
     
     # Current injection
     CI_amp: float = 0.1 # (nA)
-    CI_dur: float = 500 # (ms)
+    CI_dur: float = 3500 # (ms)
     CI_delay: float = 20 # (ms)
 
     # Simulation
-    tstop: float = 700 # (ms)
+    tstop: float = 4000 # (ms)
     dt: float = 0.1
     v_init: float = -75 # (mV)
     

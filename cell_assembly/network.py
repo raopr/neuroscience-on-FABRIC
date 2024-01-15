@@ -15,6 +15,10 @@ class AssemblyNetwork:
         self._create_assemblies()
         self._init_current_injections()
 
+    def distribute_randomly(self) -> None:
+        random_gids = self.random_state.choice(range(pc.nhost()), (self.parameters.N_assemblies * self.parameters.N_cells_per_assembly))
+        self.distribute_by_gid(random_gids)
+
     def distribute_by_assembly(self) -> None:
         # Do round-robin counting on assemblies
         assembly_ids = list(range(pc.id(), len(self.assemblies), pc.nhost()))
