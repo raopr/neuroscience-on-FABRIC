@@ -6,7 +6,7 @@ class Parameters:
 
     # Build
     N_assemblies: int = 4
-    N_cells_per_assembly: int = 40
+    N_cells_per_assembly: int = 200
     
     # Current injection
     CI_amp: float = 0.1 # (nA)
