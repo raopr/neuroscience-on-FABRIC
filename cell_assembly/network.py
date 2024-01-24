@@ -28,7 +28,7 @@ class AssemblyNetwork:
             ))
 
     def set_gids(self, distributed_gids: list) -> None:
-        self.gids_on_node = distributed_gids[pc.id()]
+        self.gids_on_node = distributed_gids[pc.id()].tolist()
         for gid in self.gids_on_node:
             pc.set_gid2node(gid, pc.id())
 
@@ -74,12 +74,14 @@ class AssemblyNetwork:
             exc_within_assembly_conns.append(exc_matrix)
             inh_within_assembly_conns.append(inh_matrix)
 
+        pc.barrier()
+
         # Connect cells between assemblies
         exc_inter_assembly_conns = []
         inh_inter_assembly_conns = []
 
         # Choose random target cells on the current node and add
-        target_cell_gids = self.parameters.random_state.choice(self.gids_on_node, self.parameters.n_between * 2, True)
+        target_cell_gids = self.random_state.choice(self.gids_on_node, self.parameters.n_between * 2, True)
         for target_cell_gid in target_cell_gids[:10]:
             exc_inter_assembly_conns.append(self._connect_between_assemblies(
                     target_cell_gid,
@@ -90,6 +92,8 @@ class AssemblyNetwork:
                     target_cell_gid,
                     "inh", 
                     self.random_state))
+        
+        pc.barrier()
         
         return exc_within_assembly_conns, inh_within_assembly_conns, exc_inter_assembly_conns, inh_inter_assembly_conns
 
@@ -124,12 +128,12 @@ class AssemblyNetwork:
         between_df.to_csv("between.csv")
                 
     def _connect_between_assemblies(self, target_cell_gid, syn_type, random_state) -> tuple:
-        random_assembly_index = self.parameters.random_state.choice(range(self.parameters.N_assemblies), 1)
+        random_assembly_index = int(self.random_state.choice(range(self.parameters.N_assemblies), 1))
         while target_cell_gid in self.assemblies[random_assembly_index].gids:
-            random_assembly_index = self.parameters.random_state.choice(range(self.parameters.N_assemblies), 1)
+            random_assembly_index = int(self.random_state.choice(range(self.parameters.N_assemblies), 1))
         
         # Choose a random cell within the source assembly
-        source_gid = np.random.choice(self.assemblies[random_assembly_index].gids, 1)
+        source_gid = int(np.random.choice(self.assemblies[random_assembly_index].gids, 1))
 
         # Add either a synapse to the target cell
         if syn_type == "exc":
