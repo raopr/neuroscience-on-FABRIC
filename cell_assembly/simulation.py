@@ -6,11 +6,11 @@ from parameters import Parameters
 from datetime import datetime
 import numpy as np
 
-#from neuron import coreneuron
-#coreneuron.enable = True
+from neuron import coreneuron
+coreneuron.enable = True
 
-#cvode = h.CVode()
-#mode = cvode.cache_efficient(True)
+cvode = h.CVode()
+mode = cvode.cache_efficient(True)
 
 ### To set GPUs, change the following lines
 # coreneuron.gpu = True
@@ -21,7 +21,7 @@ def distribute_randomly(parameters, pc):
     all_gids = list(range((parameters.N_assemblies * parameters.N_cells_per_assembly)))
     distributed_gids = []
     for _ in range(pc.nhost()):
-        distributed_gids.append(random_state.choice(a = all_gids, size = parameters.N_cells_per_assembly, replace = False))
+        distributed_gids.append(random_state.choice(a = all_gids, size = parameters.N_cells_per_assembly, replace = False).tolist())
         for gid in distributed_gids[-1]:
             all_gids.remove(gid)
     return distributed_gids
@@ -37,7 +37,10 @@ def distribute_round_robin(parameters, pc):
     all_gids = list(range((parameters.N_assemblies * parameters.N_cells_per_assembly)))
     distributed_gids = []
     for i in range(pc.nhost()):
-        distributed_gids.append(all_gids[i, len(all_gids), pc.nhost()])
+        node_gids = []
+        for j in range(i, len(all_gids), pc.nhost()):
+            node_gids.append(all_gids[j])
+        distributed_gids.append(node_gids)
     return distributed_gids
 
 if __name__ == "__main__":
@@ -46,8 +49,11 @@ if __name__ == "__main__":
     parameters = Parameters()
     assert parameters.N_assemblies == pc.nhost()
 
-    distributed_gids = distribute_randomly(parameters, pc)
-    # distributed_gids = distribute_round_robin(parameters, pc)
+    neuron_r = h.Random()
+    neuron_r.MCellRan4(parameters.random_state)
+
+    # distributed_gids = distribute_randomly(parameters, pc)
+    distributed_gids = distribute_round_robin(parameters, pc)
     # distributed_gids = distribute_by_assembly(parameters, pc)
 
     net = AssemblyNetwork(parameters)
@@ -77,16 +83,19 @@ if __name__ == "__main__":
 
     # From the Neuron's tutorial, but doesn't work on FABRIC
     # ----------
-    all_data = pc.py_alltoall([local_data] + [None] * (pc.nhost() - 1))
+    try:
+        all_data = pc.py_alltoall([local_data] + [None] * (pc.nhost() - 1))
 
-    if pc.id() == 0:
-       # Combine the data from the various processes
-       data = {}
-       for process_data in all_data:
-           data.update(process_data)
-       
-       df = pd.DataFrame(data)
-       df.to_csv("v.csv")
+        if pc.id() == 0:
+            # Combine the data from the various processes
+            data = {}
+            for process_data in all_data:
+                data.update(process_data)
+        
+        df = pd.DataFrame(data)
+        df.to_csv("v.csv")
+    except:
+        pass
 
     # ----------
 

@@ -28,7 +28,7 @@ class AssemblyNetwork:
             ))
 
     def set_gids(self, distributed_gids: list) -> None:
-        self.gids_on_node = distributed_gids[pc.id()].tolist()
+        self.gids_on_node = distributed_gids[pc.id()]
         for gid in self.gids_on_node:
             pc.set_gid2node(gid, pc.id())
 
@@ -133,7 +133,7 @@ class AssemblyNetwork:
             random_assembly_index = int(self.random_state.choice(range(self.parameters.N_assemblies), 1))
         
         # Choose a random cell within the source assembly
-        source_gid = int(np.random.choice(self.assemblies[random_assembly_index].gids, 1))
+        source_gid = int(self.random_state.choice(self.assemblies[random_assembly_index].gids, 1))
 
         # Add either a synapse to the target cell
         if syn_type == "exc":
