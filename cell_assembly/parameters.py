@@ -18,7 +18,7 @@ class Parameters:
     dt: float = 0.1
     v_init: float = -75 # (mV)
     
-    # Connectivity
+    # Connectivity within assemblies
     exc_syn_connectivity: float = 0.5
     exc_syn_weight: float = 9
     exc_syn_delay: float = 2
@@ -28,4 +28,7 @@ class Parameters:
     inh_syn_weight: float = 9
     inh_syn_delay: float = 2
     inh_syn_threshold: float = 1
+
+    # Connectivity between assemblies
+    n_between: int = 10
 
