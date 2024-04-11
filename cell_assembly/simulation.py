@@ -7,7 +7,7 @@ from datetime import datetime
 import numpy as np
 
 from neuron import coreneuron
-coreneuron.enable = True
+coreneuron.enable = False
 
 cvode = h.CVode()
 mode = cvode.cache_efficient(True)
@@ -52,8 +52,8 @@ if __name__ == "__main__":
     neuron_r = h.Random()
     neuron_r.MCellRan4(parameters.random_state)
 
-    # distributed_gids = distribute_randomly(parameters, pc)
-    distributed_gids = distribute_round_robin(parameters, pc)
+    distributed_gids = distribute_randomly(parameters, pc)
+    # distributed_gids = distribute_round_robin(parameters, pc)
     # distributed_gids = distribute_by_assembly(parameters, pc)
 
     net = AssemblyNetwork(parameters)
@@ -61,9 +61,9 @@ if __name__ == "__main__":
     pc.barrier()
     net.create_cells()
     pc.barrier()
-    conns = net.connect_cells()
+    conns = net.connect_cells(True)
     pc.barrier()
-    net.summarize_connectivity(*conns)
+    # net.summarize_connectivity(*conns)
     pc.barrier()
 
     pc.set_maxstep(1 / parameters.dt)
@@ -74,29 +74,28 @@ if __name__ == "__main__":
     pc.psolve(parameters.tstop)
     
     print(f"[{datetime.now()}]: Finished simulation on process {pc.id()}", flush = True)
-    local_data = {}
-    for cell in net.cells_on_node:
-        local_data[cell.gid] = list(cell.V.as_numpy())
+    # local_data = {}
+    # for cell in net.cells_on_node:
+    #     local_data[cell.gid] = list(cell.V.as_numpy())
     
-    df = pd.DataFrame(local_data)
-    df.to_csv(f"{pc.id()}_v.csv")
+    # df = pd.DataFrame(local_data)
+    # df.to_csv(f"{pc.id()}_v.csv")
 
     # From the Neuron's tutorial, but doesn't work on FABRIC
     # ----------
-    try:
-        all_data = pc.py_alltoall([local_data] + [None] * (pc.nhost() - 1))
+    # try:
+    #     all_data = pc.py_alltoall([local_data] + [None] * (pc.nhost() - 1))
 
-        if pc.id() == 0:
-            # Combine the data from the various processes
-            data = {}
-            for process_data in all_data:
-                data.update(process_data)
+    #     if pc.id() == 0:
+    #         # Combine the data from the various processes
+    #         data = {}
+    #         for process_data in all_data:
+    #             data.update(process_data)
         
-        df = pd.DataFrame(data)
-        df.to_csv("v.csv")
-    except:
-        pass
-
+    #     df = pd.DataFrame(data)
+    #     df.to_csv("v.csv")
+    # except:
+    #     pass
     # ----------
 
     pc.barrier()

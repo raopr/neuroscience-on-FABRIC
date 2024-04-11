@@ -10,7 +10,7 @@ class AssemblyNetwork:
 
     def __init__(self, parameters: Parameters):
         self.parameters = parameters
-        self.random_state = np.random.RandomState(self.parameters.random_state)
+        self.random_state = np.random.RandomState(self.parameters.random_state + pc.id())
         self.gids_on_node = []
         self.cells_on_node = []
 
@@ -26,6 +26,14 @@ class AssemblyNetwork:
                 exc_syn_connectivity = self.parameters.exc_syn_connectivity,
                 inh_syn_connectivity = self.parameters.inh_syn_connectivity,
             ))
+    
+    def _DNG_gid(self, n_cells, source_gid, source_synapse_idx):
+        target_gid = source_gid
+        count = 1
+        while target_gid == source_gid:
+            target_gid = np.random.RandomState(target_gid + source_synapse_idx + target_gid + count).randint(0, n_cells)
+            count += 1
+        return target_gid
 
     def set_gids(self, distributed_gids: list) -> None:
         self.gids_on_node = distributed_gids[pc.id()]
@@ -60,82 +68,49 @@ class AssemblyNetwork:
         for cell in self.cells_on_node:
             pc.cell(cell.gid, cell.spike_detector)
 
-    def connect_cells(self) -> None:
-
-        exc_within_assembly_conns = []
-        inh_within_assembly_conns = []
+    def connect_cells(self, verbose = False) -> None:
 
         # Connect cells within assemblies
         for assembly in self.assemblies:
-            exc_matrix, inh_matrix = assembly.generate_connectivity(self.random_state)
-            self._connect_within_assembly(assembly, exc_matrix, "exc")
-            self._connect_within_assembly(assembly, inh_matrix, "inh")
-
-            exc_within_assembly_conns.append(exc_matrix)
-            inh_within_assembly_conns.append(inh_matrix)
+            self._connect_within_assembly(assembly, "exc", verbose)
+            self._connect_within_assembly(assembly, "inh", verbose)
 
         pc.barrier()
 
+        # If there is only one assembly, don't add additional connections
+        if self.parameters.N_assemblies == 1:
+            pc.barrier()
+            return [], []
+        
         # Connect cells between assemblies
         exc_inter_assembly_conns = []
         inh_inter_assembly_conns = []
 
         # Choose random target cells on the current node and add
         target_cell_gids = self.random_state.choice(self.gids_on_node, self.parameters.n_between * 2, True)
-        for target_cell_gid in target_cell_gids[:10]:
+        for target_cell_gid in target_cell_gids[:self.parameters.n_between]:
             exc_inter_assembly_conns.append(self._connect_between_assemblies(
                     target_cell_gid,
                     "exc", 
                     self.random_state))
-        for target_cell_gid in target_cell_gids[10:]:
+        for target_cell_gid in target_cell_gids[self.parameters.n_between:]:
             inh_inter_assembly_conns.append(self._connect_between_assemblies(
                     target_cell_gid,
                     "inh", 
                     self.random_state))
-        
+                
         pc.barrier()
-        
-        return exc_within_assembly_conns, inh_within_assembly_conns, exc_inter_assembly_conns, inh_inter_assembly_conns
-
-    def summarize_connectivity(
-            self,
-            exc_within_assembly_conns, 
-            inh_within_assembly_conns, 
-            exc_inter_assembly_conns, 
-            inh_inter_assembly_conns) -> None:
-
-        within_matrices = []
-        index_names = []
-        for ind, assembly in enumerate(self.assemblies):
-            within_matrices.append(assembly.summarize_connectivity(exc_within_assembly_conns[ind], "exc").flatten())
-            within_matrices.append(assembly.summarize_connectivity(inh_within_assembly_conns[ind], "inh").flatten())
-            index_names.append(f"{ind}-exc")
-            index_names.append(f"{ind}-inh")
-        
-        within_df = pd.DataFrame(data = within_matrices, index = index_names)
-        within_df.to_csv("within.csv")
-        
-        N_cells = int(self.parameters.N_assemblies * self.parameters.N_cells_per_assembly)
-        exc_inter_matrix = np.zeros((N_cells, N_cells))
-        inh_inter_matrix = np.zeros((N_cells, N_cells))
-        for conn in exc_inter_assembly_conns:
-            exc_inter_matrix[conn[0], conn[1]] = 1
-        for conn in inh_inter_assembly_conns:
-            inh_inter_matrix[conn[0], conn[1]] = 1
-
-        between_matrices = [exc_inter_matrix.flatten(), inh_inter_matrix.flatten()]
-        between_df = pd.DataFrame(data = between_matrices, index = ["exc", "inh"])
-        between_df.to_csv("between.csv")
+        return exc_inter_assembly_conns, inh_inter_assembly_conns
                 
     def _connect_between_assemblies(self, target_cell_gid, syn_type, random_state) -> tuple:
-        random_assembly_index = int(self.random_state.choice(range(self.parameters.N_assemblies), 1))
+        random_assembly_index = int(random_state.choice(range(self.parameters.N_assemblies), 1))
         while target_cell_gid in self.assemblies[random_assembly_index].gids:
-            random_assembly_index = int(self.random_state.choice(range(self.parameters.N_assemblies), 1))
+            random_assembly_index = int(random_state.choice(range(self.parameters.N_assemblies), 1))
         
         # Choose a random cell within the source assembly
-        source_gid = int(self.random_state.choice(self.assemblies[random_assembly_index].gids, 1))
+        source_gid = int(random_state.choice(self.assemblies[random_assembly_index].gids, 1))
 
-        # Add either a synapse to the target cell
+        # Add a synapse to the target cell
         if syn_type == "exc":
             syn = h.Exp2Syn(self.cells_on_node[self.gids_on_node.index(target_cell_gid)].soma(0.5))
             syn.e = 0
@@ -169,17 +144,20 @@ class AssemblyNetwork:
       
         # Save gids
         return (source_gid, target_cell_gid)
-
     
-    def _connect_within_assembly(self, assembly, connectivity_matrix: np.ndarray, syn_type: str) -> None:
-        for target_syn_ind in range(connectivity_matrix.shape[0]):
-            for source_lid in range(connectivity_matrix.shape[1]):
-                if connectivity_matrix[target_syn_ind, source_lid] == 0:
-                    continue
-                if syn_type == "exc":
+    def _connect_within_assembly(self, assembly, syn_type: str, verbose: bool) -> None:
+            if syn_type == "exc":
+                for target_syn_ind in range(int(assembly.N_cells * assembly.N_exc_syn)):
                     target_lid = target_syn_ind // assembly.N_exc_syn
                     target_gid = assembly.gids[target_lid]
+
+                    # Do not connect if not on the current node
                     if target_gid not in self.gids_on_node: continue
+
+                    source_lid = self._DNG_gid(assembly.N_cells, target_gid, target_syn_ind)
+
+                    if verbose:
+                        print(f"{assembly.gids[source_lid]} -> {target_gid}({target_syn_ind})")
 
                     nc = pc.gid_connect(
                         assembly.gids[source_lid],
@@ -191,10 +169,13 @@ class AssemblyNetwork:
                     nc.threshold = self.parameters.exc_syn_threshold
                     self.cells_on_node[self.gids_on_node.index(target_gid)].netcons.append(nc)
 
-                elif syn_type == "inh":
+            elif syn_type == "inh":
+                for target_syn_ind in range(int(assembly.N_cells * assembly.N_inh_syn)):
                     target_lid = target_syn_ind // assembly.N_inh_syn
                     target_gid = assembly.gids[target_lid]
                     if target_gid not in self.gids_on_node: continue
+
+                    source_lid = self._DNG_gid(assembly.N_cells, target_gid, target_syn_ind)
 
                     nc = pc.gid_connect(
                         assembly.gids[source_lid],
@@ -204,8 +185,8 @@ class AssemblyNetwork:
                     nc.delay = self.parameters.inh_syn_delay
                     nc.threshold = self.parameters.inh_syn_threshold
                     self.cells_on_node[self.gids_on_node.index(target_gid)].netcons.append(nc)
-                else:
-                    raise ValueError
+            else:
+                raise ValueError
 
 class CellAssembly:
 
@@ -242,16 +223,16 @@ class CellAssembly:
             random_state: np.random.RandomState
             ) -> np.ndarray:
         
-        for source_cell_lid, source_cell_gid in enumerate(self.gids):
-            if syn_type == "exc":
+        if syn_type == "exc":
                 matrix = np.zeros((self.N_cells * self.N_exc_syn, self.N_cells))
                 n_syn = self.N_exc_syn
-            elif syn_type == "inh":
-                matrix = np.zeros((self.N_cells * self.N_inh_syn, self.N_cells))
-                n_syn = self.N_inh_syn
-            else:
-                raise ValueError
-
+        elif syn_type == "inh":
+            matrix = np.zeros((self.N_cells * self.N_inh_syn, self.N_cells))
+            n_syn = self.N_inh_syn
+        else:
+            raise ValueError
+        
+        for source_cell_lid, source_cell_gid in enumerate(self.gids):
             for syn_idx in range(n_syn):
                 # Choose a random cell to connect to
                 target_cell_gid = random_state.choice(self.gids, size = 1)[0]
@@ -270,22 +251,27 @@ class Cell:
 
         # Create sections
         self.soma = h.Section(name = 'soma')
-        self.dend = h.Section(name = 'dend')
+        self.dends = []
+        for i in range(10):
+            self.dends.append(h.Section(name = f'dend_i'))
 
         # Topology
-        self.dend.connect(self.soma) # child -> parent
+        for dend in self.dends:
+            dend.connect(self.soma) # child -> parent
 
         # Geometry & biophysics
         self.soma.L = 15 # (um)
         self.soma.diam = 15 # (um)
         self.soma.Ra = 150 * 22.5 # (ohm-cm)
+        self.soma.nseg = 1
+        self.soma.cm = 1
 
-        self.dend.L = 150 # (um)
-        self.dend.diam = 10 # (um)
-        self.dend.Ra = 150 # (ohm-cm)
-
-        self.soma.nseg = self.dend.nseg = 1
-        self.soma.cm = self.dend.cm = 1 # (uF/cm2)
+        for dend in self.dends:
+            dend.L = 150 # (um)
+            dend.diam = 10 # (um)
+            dend.Ra = 150 # (ohm-cm)
+            dend.nseg = 5
+            dend.cm = 1 # (uF/cm2)
 
         # Channels 
         self.soma.insert('hh')
@@ -294,9 +280,12 @@ class Cell:
         self.soma(0.5).hh.gnabar = 0.035 # (S/cm2)
         self.soma(0.5).hh.gkbar = 0.008 # (S/cm2)
 
-        self.dend.insert('pas')
-        self.dend(0.5).pas.e = -70 # (mV)
-        self.dend(0.5).pas.g = 0.00005 # (S/cm2)
+        for dend in self.dends:
+            dend.insert('hh')
+            dend(0.5).hh.el = -70 # (mV)
+            dend(0.5).hh.gl = 0.00005 # (S/cm2)
+            dend(0.5).hh.gnabar = 0.035 # (S/cm2)
+            dend(0.5).hh.gkbar = 0.008 # (S/cm2)
 
         # Connectivity
         self.exc_synapses = []
