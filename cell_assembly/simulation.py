@@ -7,13 +7,13 @@ from datetime import datetime
 import numpy as np
 
 from neuron import coreneuron
-coreneuron.enable = False
+coreneuron.enable = True
 
 cvode = h.CVode()
 mode = cvode.cache_efficient(True)
 
 ### To set GPUs, change the following lines
-# coreneuron.gpu = True
+coreneuron.gpu = True
 ###
 
 def distribute_randomly(parameters, pc):
