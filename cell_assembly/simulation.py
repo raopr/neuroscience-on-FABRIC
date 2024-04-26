@@ -1,3 +1,16 @@
+import os
+
+# Set GPUs
+from mpi4py import MPI
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+print(rank)
+
+if rank % 2 == 0:
+    os.environ["CUDA_VISIBLE_DEVICES"]="0"
+else:
+    os.environ["CUDA_VISIBLE_DEVICES"]="1"
+
 import dis
 from neuron import h
 import pandas as pd
