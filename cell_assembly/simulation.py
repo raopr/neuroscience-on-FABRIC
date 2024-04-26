@@ -74,7 +74,7 @@ if __name__ == "__main__":
     pc.barrier()
     net.create_cells()
     pc.barrier()
-    conns = net.connect_cells(True)
+    conns = net.connect_cells(False)
     pc.barrier()
     # net.summarize_connectivity(*conns)
     pc.barrier()
