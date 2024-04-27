@@ -28,8 +28,8 @@ class AssemblyNetwork:
             ))
     
     def _DNG_lid(self, assembly, source_gid, source_synapse_idx):
-        target_lid = 0
         count = 1
+        target_lid = np.random.RandomState(2 * source_gid + source_synapse_idx + count).randint(0, assembly.N_cells)
         while assembly.gids[target_lid] == source_gid:
             target_lid = np.random.RandomState(2 * target_lid + source_synapse_idx + count).randint(0, assembly.N_cells)
             count += 1
