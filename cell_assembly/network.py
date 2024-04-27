@@ -27,13 +27,13 @@ class AssemblyNetwork:
                 inh_syn_connectivity = self.parameters.inh_syn_connectivity,
             ))
     
-    def _DNG_gid(self, n_cells, source_gid, source_synapse_idx):
-        target_gid = source_gid
+    def _DNG_lid(self, assembly, source_gid, source_synapse_idx):
+        target_lid = 0
         count = 1
-        while target_gid == source_gid:
-            target_gid = np.random.RandomState(target_gid + source_synapse_idx + target_gid + count).randint(0, n_cells)
+        while assembly.gids[target_lid] == source_gid:
+            target_lid = np.random.RandomState(2 * target_lid + source_synapse_idx + count).randint(0, assembly.N_cells)
             count += 1
-        return target_gid
+        return target_lid
 
     def set_gids(self, distributed_gids: list) -> None:
         self.gids_on_node = distributed_gids[pc.id()]
@@ -154,7 +154,7 @@ class AssemblyNetwork:
                     # Do not connect if not on the current node
                     if target_gid not in self.gids_on_node: continue
 
-                    source_lid = self._DNG_gid(assembly.N_cells, target_gid, target_syn_ind)
+                    source_lid = self._DNG_lid(assembly, target_gid, target_syn_ind)
 
                     if verbose:
                         print(f"{assembly.gids[source_lid]} -> {target_gid}({target_syn_ind})")
@@ -175,7 +175,7 @@ class AssemblyNetwork:
                     target_gid = assembly.gids[target_lid]
                     if target_gid not in self.gids_on_node: continue
 
-                    source_lid = self._DNG_gid(assembly.N_cells, target_gid, target_syn_ind)
+                    source_lid = self._DNG_lid(assembly, target_gid, target_syn_ind)
 
                     nc = pc.gid_connect(
                         assembly.gids[source_lid],
