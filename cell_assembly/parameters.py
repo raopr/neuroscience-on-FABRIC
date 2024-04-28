@@ -5,16 +5,16 @@ class Parameters:
     random_state: int = 123
 
     # Build
-    N_assemblies: int = 1
-    N_cells_per_assembly: int = 5
+    N_assemblies: int = 4
+    N_cells_per_assembly: int = 2500
     
     # Current injection
     CI_amp: float = 6 # (nA)
-    CI_dur: float = 700 # (ms)
+    CI_dur: float = 3500 # (ms)
     CI_delay: float = 200 # (ms)
 
     # Simulation
-    tstop: float = 1000 # (ms)
+    tstop: float = 4000 # (ms)
     dt: float = 0.1
     v_init: float = -75 # (mV)
     
@@ -30,5 +30,5 @@ class Parameters:
     inh_syn_threshold: float = 1
 
     # Connectivity between assemblies
-    n_between: int = 1
+    n_between: int = 100
 
