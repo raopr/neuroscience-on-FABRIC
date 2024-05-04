@@ -6,11 +6,16 @@ class Parameters:
     random_state: int = 123
 
     # Distribution
-    strategy = "random" # "assembly"
+    strategy = "random"
+    # strategy = "assembly"
 
     # Build
-    N_assemblies: int = 1
-    N_E: int = 200 # number of excitatory cells per PING
+    # ----------
+    N_assemblies: int = 4
+    N_cell_per_assembly: int = 2500
+    # ----------
+
+    N_E: int = int(N_cell_per_assembly / 1.25) # number of excitatory cells per PING
     N_I: int = N_E // 4 # number of inhibitory cells per PING
 
     # Drives (we use constant I)
@@ -24,7 +29,7 @@ class Parameters:
     tau1_I = 0.5; tau2_I = 9; rev_I = -75
 
     # Simulation
-    tstop: float = 400 # (ms)
+    tstop: float = 4000 # (ms)
     dt: float = 0.1
     v_init: float = -75 # (mV)
 
@@ -33,7 +38,7 @@ class Parameters:
     IClamp_dur: float = tstop - IClamp_delay # (ms)
 
     # Connectivity between assemblies
-    N_between: int = int(N_assemblies * (N_E + N_I) * 0.01)
+    N_between: int = int((N_E + N_I) * 0.1)
 
     # File to save the graph
     graph_file = "graph.txt"

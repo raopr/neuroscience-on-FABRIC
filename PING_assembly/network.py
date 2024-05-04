@@ -74,11 +74,11 @@ class PINGAN:
             # Find a different assembly to connect to
             random_assembly_index = int(self.random_state.choice(range(self.parameters.N_assemblies), 1))
 
-            while (target_gid in self.assemblies[random_assembly_index][0]) or (target_gid in self.assemblies[random_assembly_index][1]):
+            while (target_gid in self.ASSEMBLIES[random_assembly_index][0]) or (target_gid in self.ASSEMBLIES[random_assembly_index][1]):
                 random_assembly_index = int(self.random_state.choice(range(self.parameters.N_assemblies), 1))
             
             # Choose a random exc cell within the source assembly
-            source_gid = int(self.random_state.choice(self.assemblies[random_assembly_index][0], 1))
+            source_gid = int(self.random_state.choice(self.ASSEMBLIES[random_assembly_index][0], 1))
             if target_gid in self.ALL_EXC_GIDS:
                 self._create_synapse_and_connect(source_gid, target_gid, "EE")
             else:
@@ -156,7 +156,7 @@ class PINGAN:
             weight = self._compute_gbar(self.parameters.g_II, self.parameters.p_II, self.parameters.N_I)
 
         nc.weight[0] = weight
-        nc.delay = 0
+        nc.delay = 0.5
         nc.threshold = -15
 
         self.cells_on_node[self.gids_on_node.index(target_gid)].netcons.append(nc)

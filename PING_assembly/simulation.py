@@ -1,14 +1,14 @@
 import os
 
 # Set GPUs
-# from mpi4py import MPI
-# comm = MPI.COMM_WORLD
-# rank = comm.Get_rank()
+from mpi4py import MPI
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
 
-# if rank % 2 == 0:
-#     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-# else:
-#     os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+if rank % 2 == 0:
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+else:
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 
 from neuron import h
@@ -21,13 +21,13 @@ from parameters import Parameters
 from distribution import distribute_randomly, distribute_by_assembly
 
 from neuron import coreneuron
-coreneuron.enable = False
+coreneuron.enable = True
 
 cvode = h.CVode()
 mode = cvode.cache_efficient(True)
 
 ### To set GPUs, change the following lines
-coreneuron.gpu = False
+coreneuron.gpu = True
 ###
 
 if __name__ == "__main__":
