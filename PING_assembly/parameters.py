@@ -38,7 +38,7 @@ class Parameters:
     IClamp_dur: float = tstop - IClamp_delay # (ms)
 
     # Connectivity between assemblies
-    N_between: int = int((N_E + N_I) * 0.1)
+    N_between: float = 0.1
 
     # File to save the graph
     graph_file = "graph.txt"

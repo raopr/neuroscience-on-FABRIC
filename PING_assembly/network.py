@@ -68,21 +68,49 @@ class PINGAN:
         if self.parameters.N_assemblies == 1:
             return
         
-        # Choose random target cells on the node
-        target_gids = self.random_state.choice(self.gids_on_node, self.parameters.N_between, True).tolist()
-        for target_gid in target_gids:
-            # Find a different assembly to connect to
-            random_assembly_index = int(self.random_state.choice(range(self.parameters.N_assemblies), 1))
+        for assembly in self.ASSEMBLIES:
+            self._connect_between_PINGs(assembly_gids = assembly)
 
-            while (target_gid in self.ASSEMBLIES[random_assembly_index][0]) or (target_gid in self.ASSEMBLIES[random_assembly_index][1]):
-                random_assembly_index = int(self.random_state.choice(range(self.parameters.N_assemblies), 1))
+
+    def _connect_between_PINGs(self, assembly_gids: list) -> None:
+
+        n_connected_cells_E = 0
+        n_connected_cells_I = 0
+
+        # ... – E
+        for target_gid in assembly_gids[0]:
+            # Create only 10% of connections
+            if n_connected_cells_E == int(self.parameters.N_between * self.parameters.N_E):
+                break
+
+            # Do not connect if not on the current node
+            if target_gid not in self.gids_on_node: continue
+
+            # Choose a random exc cell in a different assembly
+            source_gid = int(self.random_state.choice(self.ALL_EXC_GIDS, 1))
+            while source_gid in assembly_gids[0]:
+                source_gid = int(self.random_state.choice(self.ALL_EXC_GIDS, 1))
+
+            self._create_synapse_and_connect(source_gid, target_gid, "EE")
+            n_connected_cells_E += 1
+        
+        # ... – I
+        for target_gid in assembly_gids[1]:
+            # Create only 10% of connections
+            if n_connected_cells_I == int(self.parameters.N_between * self.parameters.N_I):
+                break
             
-            # Choose a random exc cell within the source assembly
-            source_gid = int(self.random_state.choice(self.ASSEMBLIES[random_assembly_index][0], 1))
-            if target_gid in self.ALL_EXC_GIDS:
-                self._create_synapse_and_connect(source_gid, target_gid, "EE")
-            else:
-                self._create_synapse_and_connect(source_gid, target_gid, "EI")
+            # Do not connect if not on the current node
+            if target_gid not in self.gids_on_node: continue
+
+            # Choose a random exc cell in a different assembly
+            source_gid = int(self.random_state.choice(self.ALL_EXC_GIDS, 1))
+            while source_gid in assembly_gids[0]:
+                source_gid = int(self.random_state.choice(self.ALL_EXC_GIDS, 1))
+
+            self._create_synapse_and_connect(source_gid, target_gid, "EI")
+            n_connected_cells_I += 1
+            
 
 
     def _connect_within_PING(self, assembly_gids: list) -> None:

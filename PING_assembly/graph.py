@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 if __name__ == "__main__":
-    with open("graph.txt", "r") as file:
+    with open("graph_2000.txt", "r") as file:
         lines = file.read()
 
     G = nx.Graph()
