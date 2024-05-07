@@ -12,13 +12,13 @@ class Parameters:
     # Build
     # ----------
     N_assemblies: int = 4
-    N_cell_per_assembly: int = 2500
+    N_cell_per_assembly: int = 1250
     # ----------
 
     N_E: int = int(N_cell_per_assembly / 1.25) # number of excitatory cells per PING
     N_I: int = N_E // 4 # number of inhibitory cells per PING
 
-    # Drives (we use constant I)
+    # Drives
     I_E = 1.4; sigma_E = 0.05; I_I = 0; sigma_I = 0.05
     # Synpatic conductances
     g_EE = 0; g_EI = 0.25; g_IE = 0.25; g_II = 0.25

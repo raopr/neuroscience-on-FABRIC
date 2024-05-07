@@ -13,8 +13,8 @@ else:
 
 from neuron import h
 from datetime import datetime
-import plotext as plt
 import numpy as np
+import matplotlib.pyplot as plt
 
 from network import PINGAN
 from parameters import Parameters
@@ -57,6 +57,11 @@ if __name__ == "__main__":
     net.connect_cells()
     pc.barrier()
 
+    # Report cells on the node for a sanity check
+    print(f"The first 10 cells on node {pc.id()}: {[cell.gid for cell in net.cells_on_node[:10]]}")
+    print(f"The first 10 gids on node {pc.id()}: {net.gids_on_node[:10]}")
+    pc.barrier()
+
     pc.set_maxstep(1 / parameters.dt)
 
     # Run the simulation
@@ -77,18 +82,45 @@ if __name__ == "__main__":
         data = {}
         for process_data in all_data: data.update(process_data)
 
-        # Plot the spike raster
-        num_processed = 0
+        # Collect data on at most 50+50 random cells to check the spike raster
+        raster_data_exc = []
+        raster_data_inh = []
+
+        # Collect firing rates to plot a histogram
+        fr_exc = []
+        fr_inh = []
+
         for key, value in data.items():
-            if num_processed == 400: break
-            
             if key in net.ALL_EXC_GIDS:
-                marker = 'dot'
+                if (np.random.RandomState(parameters.random_state).uniform() > 0.5) and (len(raster_data_exc) <= 50):
+                    raster_data_exc.append(np.array(value).astype(int)[:4])
+                fr_exc.append(len(value) / parameters.tstop)
             else:
-                marker = 'dollar'
-            plt.scatter(np.array(value).astype(int), [key] * len(value), marker = marker)
-            num_processed += 1
-        plt.show()
+                if (np.random.RandomState(parameters.random_state).uniform() > 0.5) and (len(raster_data_inh) <= 50):
+                    raster_data_inh.append(np.array(value).astype(int)[:4])
+                fr_inh.append(len(value) / parameters.tstop)
+
+        # Plot the raster and the histogram
+        fig, ax = plt.subplots(1, 2, figsize = (10, 5))
+        for idx, spike_times in enumerate(raster_data_exc):
+            ax[0].scatter(spike_times, [idx + 50] * len(spike_times), marker = "v", color = 'red')
+        for idx, spike_times in enumerate(raster_data_inh):
+            ax[0].scatter(spike_times, [idx] * len(spike_times), marker = ".", color = 'blue')
+
+        ax[1].hist(fr_exc, alpha = 0.7, label = "exc")
+        ax[1].hist(fr_inh, alpha = 0.7, label = "inh")
+        ax[1].legend()
+        fig.savefig("raster.png")
+
+        # Report the numbers of spikes
+        print(f"Num exc. spikes: {int(np.sum(fr_exc) * parameters.tstop)}, mean FR: {np.round(np.mean(fr_exc), 2)}")
+        print(f"Num inh. spikes: {int(np.sum(fr_inh) * parameters.tstop)}, mean FR: {np.round(np.mean(fr_inh), 2)}")
+
+        # Report oscillation frequency
+        random_cell = np.random.RandomState(parameters.random_state).choice(list(data.keys()), 1)
+        spike_times = np.array(data[int(random_cell[0])]).astype(int)
+        ISI = np.diff(spike_times)
+        print(f"The network is oscillating around {1000 / np.mean(ISI)} Hz.")
     # ----------
 
     pc.barrier()
