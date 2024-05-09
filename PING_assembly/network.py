@@ -77,10 +77,18 @@ class PINGAN:
         n_connected_cells_E = 0
         n_connected_cells_I = 0
 
+        N_assemblies_on_node = 0
+        for assembly in self.ASSEMBLIES:
+            for gid in self.gids_on_node:
+                if (gid in assembly[0]) or (gid in assembly[1]):
+                    N_assemblies_on_node += 1
+                    break
+
         # ... – E
         for target_gid in assembly_gids[0]:
-            # Create only 10% of connections
-            if n_connected_cells_E == int(self.parameters.N_between * self.parameters.N_E):
+            # Create only N_between% of connections
+            # Divide by N_assemblies_on_node to account for the number of nodes
+            if n_connected_cells_E >= int(self.parameters.N_between * self.parameters.N_E  / N_assemblies_on_node):
                 break
 
             # Do not connect if not on the current node
@@ -96,8 +104,8 @@ class PINGAN:
         
         # ... – I
         for target_gid in assembly_gids[1]:
-            # Create only 10% of connections
-            if n_connected_cells_I == int(self.parameters.N_between * self.parameters.N_I):
+            # Create only N_between% of connections
+            if n_connected_cells_I >= int(self.parameters.N_between * self.parameters.N_I / N_assemblies_on_node):
                 break
             
             # Do not connect if not on the current node
@@ -110,7 +118,6 @@ class PINGAN:
 
             self._create_synapse_and_connect(source_gid, target_gid, "EI")
             n_connected_cells_I += 1
-            
 
 
     def _connect_within_PING(self, assembly_gids: list) -> None:
@@ -152,7 +159,7 @@ class PINGAN:
 
                 
 
-    def _create_synapse_and_connect(self, source_gid: int, target_gid: int, conn_type: str) -> float:
+    def _create_synapse_and_connect(self, source_gid: int, target_gid: int, conn_type: str, delay: float = 0.5) -> float:
         # Create a new synapse on target with respect to source
         syn = h.Exp2Syn(self.cells_on_node[self.gids_on_node.index(target_gid)].soma(0.5))
 
@@ -184,7 +191,7 @@ class PINGAN:
             weight = self._compute_gbar(self.parameters.g_II, self.parameters.p_II, self.parameters.N_I)
 
         nc.weight[0] = weight
-        nc.delay = 0.5
+        nc.delay = delay
         nc.threshold = -15
 
         self.cells_on_node[self.gids_on_node.index(target_gid)].netcons.append(nc)

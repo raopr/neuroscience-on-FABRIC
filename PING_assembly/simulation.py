@@ -78,6 +78,7 @@ if __name__ == "__main__":
     all_data = pc.py_alltoall([local_data] + [None] * (pc.nhost() - 1))
 
     if pc.id() == 0:
+        print(f"Strategy: {parameters.strategy}")
         # Combine the data from the various processes
         data = {}
         for process_data in all_data: data.update(process_data)
