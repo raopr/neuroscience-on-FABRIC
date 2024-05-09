@@ -170,7 +170,7 @@ export PYTHONPATH=$HOME/install/lib/python:$PYTHONPATH
 
 Cd to the simulation folder, compile the modfiles
 ```
-nrnivmodl -coreneuron .
+nrnivmodl -coreneuron modfiles
 ```
 
 Batch script:
