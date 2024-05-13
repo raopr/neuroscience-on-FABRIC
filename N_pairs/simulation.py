@@ -8,7 +8,7 @@ rank = comm.Get_rank()
 if rank % 2 == 0:
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 else:
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 from neuron import h
@@ -38,12 +38,8 @@ if __name__ == "__main__":
     neuron_r = h.Random()
     neuron_r.MCellRan4(parameters.random_state)
     
-    if parameters.strategy == "one_node":
-        distributed_gids = [list(range(parameters.N_pairs * 2))]
-    elif parameters.strategy == "two_nodes":
-        distributed_gids = [[i for i in range(0, parameters.N_pairs * 2)[::2]], [i for i in range(1, parameters.N_pairs * 2)[::2]]]
-    else:
-        raise ValueError
+    # Assign senders to process 0 and receivers to process 1
+    distributed_gids = [[i for i in range(0, parameters.N_pairs * 2)[::2]], [i for i in range(1, parameters.N_pairs * 2)[::2]]]
 
     net = NPairs(parameters)
 
