@@ -1,5 +1,7 @@
+## Working on the readme -- incomplete 
 To collect stats we need to do the following: </br> </br> 
 1-  Create the directory `profilingLogs` in all the nodes `/home/ubuntu/neuroscience-on-FABRIC/PING_assembly/profilingLogs` </br>
-2-  Make sure `sar` and `free` tools are setup/available </br>
-3-  In a screen start gpu monitoring via `./checkgpu.sh`. CPU and Memory logs will start and end automatically with the execution.  </br>
-4-  Once the execustion ends, go to screen and cancle the running script. However the proceses will be running in the background, thus do `ps` to list the processes and `kill` to end them
+2-  Make sure `ssh` between nodes, `sar` and `free` tools are setup/available </br>
+3-  We need to start the `monitoring.sh` script on all nodes before running simulation and then end it once the simulation ends using the following command `for i in {0..2}; do ssh vm$i screen -dm bash -c "bash /home/ubuntu/neuroscience-on-FABRIC/PING_assembly/monitoring.sh; exec sh"; done`. Change the loop length based on the number of nodes we have. This command opens screen on all nodes and run the `monitoring.sh` script inside it</br>
+4- Once simulation ends, kill all screens using `for i in {0..2}; do ssh vm$i screen -dm bash -c "bash /home/ubuntu/neuroscience-on-FABRIC/PING_assembly/monitoring.sh; exec sh"; done`
+
