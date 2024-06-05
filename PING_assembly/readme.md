@@ -8,4 +8,11 @@ start monitoring using the following command `for i in {0..2}; do ssh vm$i "scre
     ssh vm$i 'screen -ls | grep -o "^[[:space:]]*[0-9]*\\.[^[:space:]]*" | awk "{print \$1}" | xargs -I{} screen -S {} -X quit';
 done```
 
+5- To load logs in pandas dataframe for plotting eventually use the following code snippets 
+`import pandas as pd` 
+</br></br>
+For memory log : `columns_to_read = ['total', 'used','free','shared','buff/cache','available']` </br>
+`df = pd.read_csv('/path/to/mem_usage.log', delim_whitespace=True,usecols=columns_to_read)`
 
+For cpu log:  `columns_to_read = ['CPU', '%user', '%nice', '%system', '%iowait','%steal', '%idle']`  </br>
+`df2 = pd.read_csv('/content/cpu_usage.log', delim_whitespace=True, skiprows=2, usecols=columns_to_read)`
