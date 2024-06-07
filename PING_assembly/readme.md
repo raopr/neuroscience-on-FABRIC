@@ -18,7 +18,40 @@ For cpu log:  `columns_to_read = ['CPU', '%user', '%nice', '%system', '%iowait',
 
 6- For plotting and saving we can use matplotlib as follows: </br>
 Read the csv first mentioned in above step and follow below </br>
-`import matplotlib.pyplot as plt` </br>
-`df.plot()` </br>
-`plt.savefig("memplot.png")` </br>
-`plt.show()` </br> 
+```
+import matplotlib.pyplot as plt
+df.plot()
+plt.savefig("memplot.png")
+plt.show()
+```
+
+7- For GPU plots and reading the logs: </br>
+```
+use_columns = [' index', ' uuid', ' name', ' utilization.gpu [%]',' utilization.memory [%]', ' memory.total [MiB]', ' memory.used [MiB]']
+df = pd.read_csv('/content/profilingLogs_master/gpu_usage.log', delimiter=',')
+df = df.drop(columns=['timestamp',' uuid',' name',' memory.total [MiB]'])
+df[' utilization.gpu [%]'] = df[' utilization.gpu [%]'].str.replace('%', '').astype(int)
+df[' utilization.memory [%]'] = df[' utilization.memory [%]'].str.replace('%', '').astype(int)
+df[' memory.used [MiB]'] = df[' memory.used [MiB]'].str.replace('MiB', '').astype(int)
+
+
+groups = df.groupby(' index')
+
+
+plt.figure(figsize=(10, 6))
+
+for name, group in groups:
+    plt.plot(group.index, group[' utilization.gpu [%]'], marker='o', label=f'GPU {name} - Utilization GPU [%]')
+    plt.plot(group.index, group[' utilization.memory [%]'], marker='o', label=f'GPU {name} - Utilization Memory [%]')
+    plt.plot(group.index, group[' memory.used [MiB]'], marker='o', label=f'GPU {name} - Memory Used [MiB]')
+
+plt.xlabel('Index')
+plt.ylabel('Values')
+plt.title('GPU Metrics')
+
+plt.legend(bbox_to_anchor=(0.5, -0.2), loc='lower center', ncol=3)
+plt.grid(True)
+plt.savefig("/content/gpuPlots.png", bbox_inches='tight') 
+
+plt.show()
+```
