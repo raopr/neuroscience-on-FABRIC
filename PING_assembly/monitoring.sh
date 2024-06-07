@@ -15,6 +15,12 @@ free -m -s 1 | stdbuf -o0 grep '^Mem:' >> /home/ubuntu/neuroscience-on-FABRIC/PI
 FREE_PID=$!
 printf "RAM utilization job ID is: %s\n" "$FREE_PID"
 
+
+#start network monitoring 
+echo "recv send" > /home/ubuntu/neuroscience-on-FABRIC/PING_assembly/profilingLogs/networkLog.log
+while true; do dstat --net --nocolor 1 5 | tail -n +3 >> networkLog.log; done
+
+
 printf "Starting gpu monitoring\n"
 monitor_gpu() {
     local gpu_index=$1
