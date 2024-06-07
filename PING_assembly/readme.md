@@ -68,3 +68,31 @@ plt.savefig("/content/gpuPlots.png", bbox_inches='tight')
 
 plt.show()
 ```
+
+8- To create subplots of all the logs: </br>
+
+```
+#load all dataframes as mem_df, cpu_df, gpu_df, ntwrk_df
+dataframes = [mem_df, cpu_df, gpu_df, ntwrk_df]
+titles = ['memory', 'cpu', 'gpu', 'network']
+
+fig, axs = plt.subplots(2, 2, figsize=(15, 10))
+axs = axs.flatten()
+
+
+for i, df in enumerate(dataframes):
+    ax = axs[i]
+    for col in df.columns:
+        ax.plot(df.index, df[col], marker='o', label=col)
+    ax.set_title(titles[i])
+    ax.legend()
+    ax.grid(True)
+
+
+plt.tight_layout()
+plt.savefig("combined_subplots.png")
+plt.show()
+```
+![Screenshot 2024-06-07 at 3 44 21 PM](https://github.com/raopr/neuroscience-on-FABRIC/assets/22073166/ec5f6100-de6d-4269-af28-96c78d845344)
+
+
