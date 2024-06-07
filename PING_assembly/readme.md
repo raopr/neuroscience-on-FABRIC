@@ -9,18 +9,30 @@ start monitoring using the following command `for i in {0..2}; do ssh vm$i "scre
 done```
 
 5- To load logs in pandas dataframe for plotting eventually use the following code snippets. Following commands work in a python enviornment like Google Colab, you can use ipython shell aswell.  
-`import pandas as pd` </br>
-For memory log : `columns_to_read = ['total', 'used','free','shared','buff/cache','available']` </br>
-`df = pd.read_csv('/path/to/mem_usage.log', delim_whitespace=True,usecols=columns_to_read)`
+`import pandas as pd` </br></br>
+For memory log : </br>
+```
+columns_to_read = ['total', 'used','free','shared','buff/cache','available']
+mem_df = pd.read_csv('/path/to/mem_usage.log', delim_whitespace=True,usecols=columns_to_read)
+```
 
-For cpu log:  `columns_to_read = ['CPU', '%user', '%nice', '%system', '%iowait','%steal', '%idle']`  </br>
-`df2 = pd.read_csv('/content/cpu_usage.log', delim_whitespace=True, skiprows=2, usecols=columns_to_read)` </br></br>
+For cpu log:  
+```
+columns_to_read = ['CPU', '%user', '%nice', '%system', '%iowait','%steal', '%idle']
+cpu_df = pd.read_csv('/content/cpu_usage.log', delim_whitespace=True, skiprows=2, usecols=columns_to_read)
+```
+
+For Network log: </br>
+```
+ntwrk_df = pd.read_csv('/home/ubuntu/neuroscience-on-FABRIC/PING_assembly/profilingLogs/networkLog.log', delim_whitespace=True)
+ntwrk_df = ntwrk_df.apply(lambda x: x.str.replace('B', '').astype(int))
+```
 
 6- For plotting and saving we can use matplotlib as follows: </br>
 Read the csv first mentioned in above step and follow below </br>
 ```
 import matplotlib.pyplot as plt
-df.plot()
+mem_df.plot()
 plt.savefig("memplot.png")
 plt.show()
 ```
