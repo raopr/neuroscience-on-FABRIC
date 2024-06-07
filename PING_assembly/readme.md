@@ -13,7 +13,8 @@ done```
 For memory log : </br>
 ```
 columns_to_read = ['total', 'used','free','shared','buff/cache','available']
-mem_df = pd.read_csv('/path/to/mem_usage.log', delim_whitespace=True,usecols=columns_to_read)
+mem_df = pd.read_csv('/path/to/mem_usage.log', delim_whitespace=True)
+mem_df.reset_index(drop=True, inplace=True)
 ```
 
 For cpu log:  
