@@ -1,4 +1,5 @@
-## Working on the readme -- incomplete 
+## Stats collection and plotting readme
+
 To collect stats we need to do the following: </br> </br> 
 1-  Create the directory `profilingLogs` in all the nodes `/home/ubuntu/neuroscience-on-FABRIC/PING_assembly/profilingLogs` </br></br>
 2-  Make sure `ssh` between nodes, `sar` and `free` tools are setup/available </br></br>
@@ -72,7 +73,9 @@ plt.show()
 8- To create subplots of all the logs: </br>
 
 ```
-#load all dataframes as mem_df, cpu_df, gpu_df, ntwrk_df
+###load all dataframes as mem_df, cpu_df, gpu_df, ntwrk_df###
+
+
 dataframes = [mem_df, cpu_df, gpu_df, ntwrk_df]
 titles = ['memory', 'cpu', 'gpu', 'network']
 
