@@ -18,7 +18,7 @@ printf "RAM utilization job ID is: %s\n" "$FREE_PID"
 
 #start network monitoring 
 echo "recv send" > /home/ubuntu/neuroscience-on-FABRIC/N_pairs/profilingLogs/networkLog.log
-while true; do dstat --net --nocolor 1 5 | tail -n +3 >> /home/ubuntu/neuroscience-on-FABRIC/N_pairs/profilingLogs/networkLog.log; done
+
 
 
 printf "Starting gpu monitoring\n"
@@ -27,6 +27,7 @@ monitor_gpu() {
     local log_file="/home/ubuntu/neuroscience-on-FABRIC/N_pairs/profilingLogs/gpu_usage.log"
     nvidia-smi --query-gpu=timestamp,index,uuid,name,utilization.gpu,utilization.memory,memory.total,memory.used --format=csv -i $gpu_index | head -n 1 > $log_file
     while true; do
+        dstat --net --nocolor 1 5 | tail -n +3 >> /home/ubuntu/neuroscience-on-FABRIC/N_pairs/profilingLogs/networkLog.log
         nvidia-smi --query-gpu=timestamp,index,name,uuid,utilization.gpu,utilization.memory,memory.total,memory.used --format=csv -i $gpu_index | tail -n +2 >> $log_file
         sleep 1
     done
