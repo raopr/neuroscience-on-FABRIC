@@ -46,7 +46,7 @@ class NPairs:
         for cell in self.cells_on_node:
             pc.cell(cell.gid, cell.spike_detector)
 
-    def connect_cells(self) -> None:
+    def connect_cells(self, symmetric = False) -> None:
         # Clear the graph file if exists
         if os.path.isfile(self.parameters.graph_file):
             open(self.parameters.graph_file, 'w').close()
@@ -56,6 +56,14 @@ class NPairs:
             if target_gid not in self.gids_on_node: continue
             source_gid = int(target_gid - 1)
             self._create_synapse_and_connect(source_gid, target_gid)
+
+        # Also add a backward connection
+        if symmetric == True:
+            for target_gid in self.ALL_GIDS[0::2]:
+                # Do not connect if not on the current node
+                if target_gid not in self.gids_on_node: continue
+                source_gid = int(target_gid + 1)
+                self._create_synapse_and_connect(source_gid, target_gid)
                 
 
     def _create_synapse_and_connect(self, source_gid: int, target_gid: int) -> float:
