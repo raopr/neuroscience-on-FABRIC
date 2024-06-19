@@ -41,6 +41,15 @@ if __name__ == "__main__":
     # Assign senders to process 0 and receivers to process 1
     distributed_gids = [[i for i in range(0, parameters.N_pairs * 2)[::2]], [i for i in range(1, parameters.N_pairs * 2)[::2]]]
 
+    # Distribute senders and receivers randomly
+    # random_state = np.random.RandomState(parameters.random_state)
+    # all_gids = np.arange(parameters.N_pairs * 2)
+    # random_state.shuffle(all_gids)
+    # distributed_gids = [[i for i in all_gids[::2]], [i for i in all_gids[1::2]]]
+    
+    # Half of pairs is on one process, the other half is on the other one
+    distributed_gids = [[i for i in range(parameters.N_pairs * 2)[:parameters.N_pairs]], [i for i in range(parameters.N_pairs * 2)[parameters.N_pairs:]]]
+
     net = NPairs(parameters)
 
     net.set_gids(distributed_gids)
