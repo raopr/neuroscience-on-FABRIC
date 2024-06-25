@@ -44,10 +44,10 @@ class PINGAN:
         for lid, gid in enumerate(self.gids_on_node):
             if gid in self.ALL_EXC_GIDS:
                 cell = RTMExcCell(gid = gid, lid = lid)
-                cell.IClamp.amp = self.parameters.I_E * (1 + self.random_state.normal(0, self.parameters.sigma_E))
+                cell.IClamp.amp = self.parameters.I_E # * (1 + self.random_state.normal(0, self.parameters.sigma_E))
             else:
                 cell = WBInhCell(gid = gid, lid = lid)
-                cell.IClamp.amp = self.parameters.I_I * (1 + self.random_state.normal(0, self.parameters.sigma_I))
+                cell.IClamp.amp = self.parameters.I_I # * (1 + self.random_state.normal(0, self.parameters.sigma_I))
             
             cell.IClamp.dur = self.parameters.IClamp_dur
             cell.IClamp.delay = self.parameters.IClamp_delay
@@ -73,10 +73,12 @@ class PINGAN:
             self._connect_between_PINGs(assembly_gids = assembly)
 
     def connect_cells(self, graph_file) -> None:
-        graph = pd.read_csv(graph_file, header = None, columns = ["source_gid", "target_gid", "weight", "conn_type"])
+        graph = pd.read_csv(graph_file, header = None)
+        graph.columns = ["source_gid", "target_gid", "weight", "conn_type"]
+        print(graph.head())
         for i in range(len(graph)):
             if graph.loc[i, "target_gid"] not in self.gids_on_node: continue
-            self._create_synapse_and_connect(graph.loc[i, "source_gid"], graph.loc[i, "target_gid"], graph.loc["conn_type"], graph.loc["weight"])
+            self._create_synapse_and_connect(graph.loc[i, "source_gid"], graph.loc[i, "target_gid"], graph.loc[i, "conn_type"], graph.loc[i, "weight"])
 
     def _connect_between_PINGs(self, assembly_gids: list) -> None:
 
