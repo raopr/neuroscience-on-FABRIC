@@ -188,3 +188,6 @@ Run with
 ```
 sbatch batch.sh
 ```
+
+# Broken NVIDIA driver
+[Fix is here](https://stackoverflow.com/questions/43022843/nvidia-nvml-driver-library-version-mismatch)
