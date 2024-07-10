@@ -1,3 +1,16 @@
+## Run Instructions
+
+1. Update the paths just in case.
+```python
+export PATH=$HOME/install/bin:$PATH
+export PYTHONPATH=$HOME/install/lib/python:$PYTHONPATH
+export METIS_DLL=/usr/local/lib/libmetis.so
+```
+2. Update `parameters.py` to the right values.
+3. Delete `graph.txt` if exists.
+4. Run `python3 generate_connectivity.py`.
+5. Run `sbatch batch.sh`.
+
 ## Stats collection and plotting readme
 
 To collect stats we need to do the following: </br> </br> 
