@@ -16,6 +16,7 @@ pip3 install mpi4py-mpich
 pip3 install pytest
 pip3 install sympy
 pip3 install pandas
+pip3 install networkx
 
 sudo apt-get install -y bison
 sudo apt-get install -y flex
@@ -164,6 +165,18 @@ make -j
 make install
 export PATH=$HOME/install/bin:$PATH
 export PYTHONPATH=$HOME/install/lib/python:$PYTHONPATH
+```
+
+# Metis
+```
+wget http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-5.1.0.tar.gz
+gunzip metis-5.1.0.tar.gz
+tar -xvf metis-5.1.0.tar
+cd metis-5.1.0
+sudo make config shared=1
+sudo make install
+pip3 install metis
+export METIS_DLL=/usr/local/lib/libmetis.so
 ```
 
 # Run
