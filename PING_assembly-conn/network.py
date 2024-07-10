@@ -44,10 +44,10 @@ class PINGAN:
         for lid, gid in enumerate(self.gids_on_node):
             if gid in self.ALL_EXC_GIDS:
                 cell = RTMExcCell(gid = gid, lid = lid)
-                cell.IClamp.amp = self.parameters.I_E # * (1 + self.random_state.normal(0, self.parameters.sigma_E))
+                cell.IClamp.amp = self.parameters.I_E
             else:
                 cell = WBInhCell(gid = gid, lid = lid)
-                cell.IClamp.amp = self.parameters.I_I # * (1 + self.random_state.normal(0, self.parameters.sigma_I))
+                cell.IClamp.amp = self.parameters.I_I
             
             cell.IClamp.dur = self.parameters.IClamp_dur
             cell.IClamp.delay = self.parameters.IClamp_delay
@@ -159,7 +159,7 @@ class PINGAN:
             file.write(f"{source_gid},{target_gid},{weight},{conn_type}\n")
                 
 
-    def _create_synapse_and_connect(self, source_gid: int, target_gid: int, conn_type: str, weight: float, delay: float = 0.5) -> float:
+    def _create_synapse_and_connect(self, source_gid: int, target_gid: int, conn_type: str, weight: float) -> float:
         # Create a new synapse on target with respect to source
         syn = h.Exp2Syn(self.cells_on_node[self.gids_on_node.index(target_gid)].soma(0.5))
 
@@ -182,7 +182,6 @@ class PINGAN:
             )
 
         nc.weight[0] = weight
-        nc.delay = delay
         nc.threshold = -15
 
         self.cells_on_node[self.gids_on_node.index(target_gid)].netcons.append(nc)

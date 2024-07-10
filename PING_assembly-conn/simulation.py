@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 
 from network import PINGAN
 from parameters import Parameters
-from distribution import distribute_randomly, distribute_by_assembly
+from distribution import distribute_randomly, distribute_by_assembly, distribute_by_partitioning
 
 from neuron import coreneuron
 coreneuron.enable = True
@@ -43,6 +43,8 @@ if __name__ == "__main__":
         distributed_gids = distribute_randomly(parameters, pc)
     elif parameters.strategy == "assembly":
         distributed_gids = distribute_by_assembly(parameters, pc)
+    elif parameters.strategy == "partitioning":
+        distributed_gids = distribute_by_partitioning(parameters, pc)
     else:
         raise ValueError
 
