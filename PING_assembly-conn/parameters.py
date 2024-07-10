@@ -9,7 +9,6 @@ class Parameters:
     # strategy = "random"
     # strategy = "assembly"
     strategy = "partitioning"
-    nparts = 2
 
     # Build
     # ----------
