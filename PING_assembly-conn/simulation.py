@@ -40,11 +40,11 @@ if __name__ == "__main__":
     neuron_r.MCellRan4(parameters.random_state)
 
     if parameters.strategy == "random":
-        distributed_gids = distribute_randomly(parameters, pc)
+        distributed_gids = distribute_randomly(parameters)
     elif parameters.strategy == "assembly":
-        distributed_gids = distribute_by_assembly(parameters, pc)
+        distributed_gids = distribute_by_assembly(parameters)
     elif parameters.strategy == "partitioning":
-        distributed_gids = distribute_by_partitioning(parameters, pc)
+        distributed_gids = distribute_by_partitioning(parameters)
     else:
         raise ValueError
 
