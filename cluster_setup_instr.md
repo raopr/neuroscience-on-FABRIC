@@ -169,7 +169,8 @@ export PYTHONPATH=$HOME/install/lib/python:$PYTHONPATH
 
 # Metis
 ```
-wget http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-5.1.0.tar.gz
+git clone https://github.com/xijunke/METIS-1
+cd METIS-1/
 gunzip metis-5.1.0.tar.gz
 tar -xvf metis-5.1.0.tar
 cd metis-5.1.0
