@@ -25,6 +25,8 @@ sudo apt install sysstat -y
 sudo apt install dstat -y
 ```
 
+To resolve `sudo: unable to resolve host Node1: Name or service not known` do `sudo nano /etc/hosts` and add `Node1` or the respective node next to localhost with a space
+
 # NVIDIA drivers
 
 On all nodes:
