@@ -10,7 +10,15 @@ export METIS_DLL=/usr/local/lib/libmetis.so
 3. Delete `graph.txt` if exists.
 4. Run `python3 generate_connectivity.py`.
 5. Run `sbatch batch.sh`.
-
+6. Sparse connectivity parameters:
+```
+# Drives
+I_E = 1.4; sigma_E = 0.05; I_I = 0; sigma_I = 0.05
+# Synpatic conductances
+g_EE = 0; g_EI = 0.25; g_IE = 0.25; g_II = 0.25
+# Synaptic probabilities
+p_EE = 0; p_EI = 0.5; p_IE = 0.5; p_II = 0.5
+```
 ## Stats collection and plotting readme
 
 To collect stats we need to do the following: </br> </br> 
