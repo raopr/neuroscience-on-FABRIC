@@ -21,6 +21,8 @@ pip3 install networkx
 sudo apt-get install -y bison
 sudo apt-get install -y flex
 sudo apt-get install -y libreadline-dev
+sudo apt install sysstat -y
+sudo apt install dstat -y
 ```
 
 # NVIDIA drivers
