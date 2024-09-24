@@ -8,7 +8,10 @@ sudo apt install -y python3-all-dev
 sudo apt install -y python3-pip
 sudo apt install -y python3-numpy
 sudo apt install -y python3-scipy
-sudo apt install -y python3-matplotlib
+sudo apt install -y python3-matplotlib 
+sudo apt install sysstat -y
+sudo apt install dstat -y
+sudo apt install net-tools -y
 
 pip3 install mpi4py-mpich
 pip3 install pytest
