@@ -23,6 +23,7 @@ sudo apt-get install -y flex
 sudo apt-get install -y libreadline-dev
 sudo apt install sysstat -y
 sudo apt install dstat -y
+sudo apt install net-tools -y
 ```
 
 To resolve `sudo: unable to resolve host Node1: Name or service not known` do `sudo nano /etc/hosts` and add `Node1` or the respective node next to localhost with a space
