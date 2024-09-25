@@ -25,10 +25,13 @@ To collect stats we need to do the following: </br> </br>
 1-  Create the directory `profilingLogs` in all the nodes `/home/ubuntu/neuroscience-on-FABRIC/PING_assembly/profilingLogs` </br></br>
 2-  Make sure `ssh` between nodes, `sar` and `free` tools are setup/available </br></br>
 3-  We need to start the `monitoring.sh` script on all nodes before running simulation and then end it once the simulation ends. </br> </br>
-start monitoring using the following command `for i in {0..2}; do ssh vm$i "screen -dm bash -c 'bash /home/ubuntu/neuroscience-on-FABRIC/PING_assembly/monitoring.sh; exec sh'"; done`. Change the loop length based on the number of nodes we have. This command opens screen on all nodes and run the `monitoring.sh` script inside it</br></br>
+start monitoring using the following command `for i in {0..2}; do ssh vm$i "screen -dm bash -c 'bash /home/ubuntu/neuroscience-on-FABRIC/PING_assembly/monitoring.sh; exec sh'"; done`. Change the loop length based on the number of nodes we have. This command opens screen on all nodes and run the `monitoring.sh` script inside it</br>
+For starting monitoring session in single screen do `screen -dm bash -c 'bash ./monitoring.sh; exec sh'` </br></br>
 4- Once simulation ends, kill all screens using ```for i in {0..2}; do 
     ssh vm$i 'screen -ls | grep -o "^[[:space:]]*[0-9]*\\.[^[:space:]]*" | awk "{print \$1}" | xargs -I{} screen -S {} -X quit';
 done```
+</br>
+or to kill screen in single node session do `screen -ls` and note the screen id and do `kill <id>` 
 
 5- To load logs in pandas dataframe for plotting eventually use the following code snippets. Following commands work in a python enviornment like Google Colab, you can use ipython shell aswell.  
 `import pandas as pd` </br></br>
