@@ -22,8 +22,8 @@ if __name__ == "__main__":
         f"cclamp_{i}_E": {
         "input_type": "current_clamp",
         "module": "IClamp",
-        "node_set": gids['all_exc_gids'],
-        "gids": gids['all_exc_gids'],
+        "node_set": [gid for gid in gids['all_exc_gids'] if gid in gids['all_gids'][i]],
+        "gids": [gid for gid in gids['all_exc_gids'] if gid in gids['all_gids'][i]],
         "amp": parameters.I_E,
         "delay": parameters.IClamp_delay,
         "duration": parameters.IClamp_dur

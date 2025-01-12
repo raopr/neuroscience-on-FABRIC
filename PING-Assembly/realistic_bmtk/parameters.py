@@ -20,7 +20,7 @@ class Parameters:
     N_I: int = N_E // 4 # number of inhibitory cells per PING
 
     # Drives (deterministic in this version)
-    I_E = 0.5; I_I = 0.0
+    I_E = 1.4; I_I = 0.0
     # Synpatic conductances
     g_EE = 0; g_EI = 0.25; g_IE = 0.25; g_II = 0.25
     # Synaptic probabilities
